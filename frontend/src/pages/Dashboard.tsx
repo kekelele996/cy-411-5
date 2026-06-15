@@ -42,7 +42,7 @@ export function Dashboard() {
         <Col xs={24} md={8}><Card><Statistic title="本周排放" value={formatCarbon(stats.weekTotal)} /></Card></Col>
         <Col xs={24} md={8}><Card><Statistic title="本月排放" value={formatCarbon(stats.monthTotal)} /></Card></Col>
       </Row>
-      {stats.topCategory && <ReductionSuggestionCard topCategory={stats.topCategory} />}
+      {topCategory && <ReductionSuggestionCard topCategory={topCategory} />}
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={15}>
           <Card title="碳排趋势">
