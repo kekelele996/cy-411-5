@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Button, DatePicker, Form, Input, InputNumber, Modal, Pagination, Select, Space, Typography, message } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { BulbOutlined, PlusOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { ActivityCard } from '../components/common/ActivityCard';
 import { EmptyState } from '../components/common/EmptyState';
 import { ActivityCategory, ACTIVITY_CATEGORY_LABELS } from '../constants/activity';
 import { useActivityStore } from '../stores/activityStore';
+import { useCarbonStats } from '../hooks/useCarbonStats';
 import { useAuth } from '../hooks/useAuth';
 import { usePagination } from '../hooks/usePagination';
 import { Messages } from '../constants/messages';
@@ -17,6 +18,8 @@ export function Activities() {
   const load = useActivityStore((state) => state.load);
   const add = useActivityStore((state) => state.add);
   const { token } = useAuth();
+  const stats = useCarbonStats(rows);
+  const topCategoryKey = stats.topCategory?.category;
   const filtered = useMemo(() => (category ? rows.filter((row) => row.category === category) : rows), [rows, category]);
   const pagination = usePagination(filtered, 5);
 
@@ -41,6 +44,12 @@ export function Activities() {
         onChange={setCategory}
         style={{ width: 220 }}
         options={Object.values(ActivityCategory).map((value) => ({ value, label: ACTIVITY_CATEGORY_LABELS[value] }))}
+        optionRender={(option) => (
+          <Space>
+            <span>{option.label}</span>
+            {option.value === topCategoryKey && <BulbOutlined style={{ color: '#2f7d59' }} />}
+          </Space>
+        )}
       />
       <div className="card-grid">
         {pagination.currentRows.length ? pagination.currentRows.map((activity) => <ActivityCard key={activity.id} activity={activity} />) : <EmptyState text="暂无活动记录" />}

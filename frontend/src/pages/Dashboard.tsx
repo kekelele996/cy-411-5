@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Card, Col, Row, Space, Statistic, Typography } from 'antd';
 import { CarbonTrendChart } from '../components/common/CarbonTrendChart';
 import { GoalProgressCard } from '../components/common/GoalProgressCard';
+import { ReductionSuggestionCard } from '../components/common/ReductionSuggestionCard';
 import { EmptyState } from '../components/common/EmptyState';
 import { useActivityStore } from '../stores/activityStore';
 import { useGoalStore } from '../stores/goalStore';
@@ -36,6 +37,7 @@ export function Dashboard() {
         <Col xs={24} md={8}><Card><Statistic title="本周排放" value={formatCarbon(stats.weekTotal)} /></Card></Col>
         <Col xs={24} md={8}><Card><Statistic title="本月排放" value={formatCarbon(stats.monthTotal)} /></Card></Col>
       </Row>
+      {stats.topCategory && <ReductionSuggestionCard topCategory={stats.topCategory} />}
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={15}>
           <Card title="碳排趋势">
