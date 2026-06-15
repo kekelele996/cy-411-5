@@ -8,7 +8,7 @@ import { useActivityStore } from '../stores/activityStore';
 import { useGoalStore } from '../stores/goalStore';
 import { useCarbonStats } from '../hooks/useCarbonStats';
 import { useAuth } from '../hooks/useAuth';
-import { getMonthRange } from '../utils/dateRange';
+import { get30DaysRange } from '../utils/dateRange';
 import { formatCarbon } from '../utils/formatters';
 
 export function Dashboard() {
@@ -21,7 +21,7 @@ export function Dashboard() {
 
   useEffect(() => {
     if (!token) return;
-    const [start, end] = getMonthRange();
+    const [start, end] = get30DaysRange();
     void loadActivities({ start, end });
     void loadGoals();
   }, [loadActivities, loadGoals, token]);

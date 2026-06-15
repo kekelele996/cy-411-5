@@ -12,6 +12,10 @@ export function getMonthRange() {
   return [dayjs().startOf('month').format('YYYY-MM-DD'), dayjs().endOf('month').format('YYYY-MM-DD')] as const;
 }
 
+export function get30DaysRange() {
+  return [dayjs().subtract(30, 'day').format('YYYY-MM-DD'), dayjs().format('YYYY-MM-DD')] as const;
+}
+
 export function getYearRange() {
   return [dayjs().startOf('year').format('YYYY-MM-DD'), dayjs().endOf('year').format('YYYY-MM-DD')] as const;
 }
