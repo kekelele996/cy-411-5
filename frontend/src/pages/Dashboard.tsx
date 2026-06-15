@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Card, Col, Row, Space, Statistic, Typography } from 'antd';
 import { CarbonTrendChart } from '../components/common/CarbonTrendChart';
 import { GoalProgressCard } from '../components/common/GoalProgressCard';
@@ -7,24 +7,29 @@ import { EmptyState } from '../components/common/EmptyState';
 import { useActivityStore } from '../stores/activityStore';
 import { useGoalStore } from '../stores/goalStore';
 import { useCarbonStats } from '../hooks/useCarbonStats';
+import { calculateTopCategory } from '../utils/carbonCalculator';
 import { useAuth } from '../hooks/useAuth';
-import { get30DaysRange } from '../utils/dateRange';
+import { getMonthRange } from '../utils/dateRange';
 import { formatCarbon } from '../utils/formatters';
 
 export function Dashboard() {
   const rows = useActivityStore((state) => state.rows);
+  const thirtyDaysRows = useActivityStore((state) => state.thirtyDaysRows);
   const loadActivities = useActivityStore((state) => state.load);
+  const loadThirtyDays = useActivityStore((state) => state.loadThirtyDays);
   const goals = useGoalStore((state) => state.goals);
   const loadGoals = useGoalStore((state) => state.load);
   const { token } = useAuth();
   const stats = useCarbonStats(rows);
+  const topCategory = useMemo(() => calculateTopCategory(thirtyDaysRows), [thirtyDaysRows]);
 
   useEffect(() => {
     if (!token) return;
-    const [start, end] = get30DaysRange();
+    const [start, end] = getMonthRange();
     void loadActivities({ start, end });
+    void loadThirtyDays();
     void loadGoals();
-  }, [loadActivities, loadGoals, token]);
+  }, [loadActivities, loadThirtyDays, loadGoals, token]);
 
   return (
     <Space direction="vertical" size={20} style={{ width: '100%' }}>

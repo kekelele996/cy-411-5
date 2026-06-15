@@ -7,6 +7,7 @@
     "dev": "vite --host 0.0.0.0 --port 18411",
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b",
+    "test": "node tests/carbonStats.test.js",
     "preview": "vite preview --host 0.0.0.0 --port 18411"
   },
   "dependencies": {
@@ -25,8 +26,8 @@
     "@types/node": "^22.10.2",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "vite": "^6.0.6"
   }
 }
-

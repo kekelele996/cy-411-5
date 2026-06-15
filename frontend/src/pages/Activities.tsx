@@ -6,7 +6,7 @@ import { ActivityCard } from '../components/common/ActivityCard';
 import { EmptyState } from '../components/common/EmptyState';
 import { ActivityCategory, ACTIVITY_CATEGORY_LABELS } from '../constants/activity';
 import { useActivityStore } from '../stores/activityStore';
-import { useCarbonStats } from '../hooks/useCarbonStats';
+import { calculateTopCategory } from '../utils/carbonCalculator';
 import { useAuth } from '../hooks/useAuth';
 import { usePagination } from '../hooks/usePagination';
 import { Messages } from '../constants/messages';
@@ -15,18 +15,21 @@ export function Activities() {
   const [open, setOpen] = useState(false);
   const [category, setCategory] = useState<ActivityCategory | undefined>();
   const rows = useActivityStore((state) => state.rows);
+  const thirtyDaysRows = useActivityStore((state) => state.thirtyDaysRows);
   const load = useActivityStore((state) => state.load);
+  const loadThirtyDays = useActivityStore((state) => state.loadThirtyDays);
   const add = useActivityStore((state) => state.add);
   const { token } = useAuth();
-  const stats = useCarbonStats(rows);
-  const topCategoryKey = stats.topCategory?.category;
+  const topCategory = useMemo(() => calculateTopCategory(thirtyDaysRows), [thirtyDaysRows]);
+  const topCategoryKey = topCategory?.category;
   const filtered = useMemo(() => (category ? rows.filter((row) => row.category === category) : rows), [rows, category]);
   const pagination = usePagination(filtered, 5);
 
   useEffect(() => {
     if (!token) return;
     void load();
-  }, [load, token]);
+    void loadThirtyDays();
+  }, [load, loadThirtyDays, token]);
 
   return (
     <Space direction="vertical" size={16} style={{ width: '100%' }}>

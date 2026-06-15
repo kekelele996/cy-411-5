@@ -1,6 +1,6 @@
 import { Card, Space, Typography } from 'antd';
 import { BulbOutlined } from '@ant-design/icons';
-import { TopCategoryInfo } from '../../hooks/useCarbonStats';
+import { TopCategoryInfo } from '../../utils/carbonCalculator';
 import { ACTIVITY_CATEGORY_LABELS, REDUCTION_SUGGESTIONS } from '../../constants/activity';
 import { formatCarbon } from '../../utils/formatters';
 
